@@ -4,6 +4,7 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { useParams } from "react-router-dom";
 import { fetchNutritionForRecipe } from "../../redux/Slices/nutritionSlice";
 import { Nutrition } from "../../redux/Slices/nutritionSlice";
+import FoodSearchAndAdd from "../Food/FoodSearchAndAdd";
 import axios from "axios";
 
 interface Ingredient {
@@ -136,6 +137,8 @@ const RecipeDetails = () => {
                     ))}
                 </>
             )}
+
+            <FoodSearchAndAdd />
 
         </div>
     );

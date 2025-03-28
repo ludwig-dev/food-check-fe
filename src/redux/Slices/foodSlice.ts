@@ -4,9 +4,8 @@ import axios from "axios";
 const API_URL_FOOD = "http://localhost:8080/api/food";
 
 export interface Food {
-  nummer: number;
-  namn: string;
-  vetenskapligtNamn: string;
+  id: number;
+  name: string;
 }
 
 interface FoodState {
