@@ -1,13 +1,20 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import { persistReducer, persistStore } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+
+// Reducers
 import authReducer from "./Slices/authSlice";
 import userReducer from "./Slices/userSlice";
-import storage from "redux-persist/lib/storage";
-import { persistReducer, persistStore } from "redux-persist";
-import { combineReducers } from "@reduxjs/toolkit";
+import recipeReducer from "./Slices/recipeSlice";
+import foodReducer from "./Slices/foodSlice";
+import nutritionReducer from "./Slices/nutritionSlice";
 
 const rootReducer = combineReducers({
     auth: authReducer,
     user: userReducer,
+    recipe: recipeReducer,
+    food: foodReducer,
+    nutrition: nutritionReducer,
 });
 
 const persistConfig = {

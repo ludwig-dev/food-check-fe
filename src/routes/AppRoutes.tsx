@@ -6,6 +6,8 @@ import Register from "../components/Auth/Register";
 import AdminPage from "../components/Admin/AdminPage";
 import AdminRoute from "../components/Admin/adminRoute";
 import Home from "../components/Shared/Home";
+import RecipeList from "../components/Recipes/RecipeList";
+import RecipeDetails from "../components/Recipes/RecipeDetails";
 
 const AppRoutes = () => (
     <Routes>
@@ -21,6 +23,22 @@ const AppRoutes = () => (
             element={
                 <PrivateRoute>
                     <Profile />
+                </PrivateRoute>
+            }
+        />
+        <Route
+            path="/recipes"
+            element={
+                <PrivateRoute>
+                    <RecipeList />
+                </PrivateRoute>
+            }
+        />
+        <Route
+            path="/recipes/:id"
+            element={
+                <PrivateRoute>
+                    <RecipeDetails />
                 </PrivateRoute>
             }
         />
