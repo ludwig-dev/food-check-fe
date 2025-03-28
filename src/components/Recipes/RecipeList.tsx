@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { fetchRecipes } from "../../redux/Slices/recipeSlice";
-import { fetchNutritionForRecipe } from "../../redux/Slices/nutritionSlice";
 import { Link } from "react-router-dom";
 
 
@@ -14,10 +13,6 @@ const RecipeList = () => {
     useEffect(() => {
         dispatch(fetchRecipes());
     }, [dispatch]);
-
-    const handleGetNutrition = (id: number) => {
-        dispatch(fetchNutritionForRecipe(id));
-    };
 
     return (
         <div>
