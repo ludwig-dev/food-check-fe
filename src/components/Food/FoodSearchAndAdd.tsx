@@ -15,6 +15,8 @@ const FoodSearchAndAdd = () => {
     const [query, setQuery] = useState("");
     const [amountMap, setAmountMap] = useState<{ [key: number]: number }>({});
 
+    const[toggle, setToggle] = useState(false);
+
     const handleSearch = () => {
         if (query.trim()) dispatch(searchFood(query));
     };
@@ -27,8 +29,21 @@ const FoodSearchAndAdd = () => {
         setAmountMap({ ...amountMap, [foodId]: 0 }); // reset
     };
 
+    const handleToggle = () => {
+        setToggle(!toggle);
+    };
+
+    if(!toggle) {
+        return (
+            <div style={{ marginTop: "2rem" }}>
+                <button onClick={handleToggle}>Visa sökfält</button>
+            </div>
+        );
+    }
+
     return (
         <div style={{ marginTop: "2rem" }}>
+            <button onClick={handleToggle}>Dölj sökfält</button>
             <h4>🔍 Sök och lägg till ingrediens</h4>
 
             <input
