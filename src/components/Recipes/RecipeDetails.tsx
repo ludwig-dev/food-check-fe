@@ -15,9 +15,7 @@ const RecipeDetails = () => {
     const { id } = useParams<{ id: string }>();
     const dispatch = useDispatch<AppDispatch>();
     const recipe = useSelector((state: RootState) => state.recipe.recipes.find((r) => r.id === parseInt(id!)));
-    const loading = useSelector((state: RootState) => state.recipe.loading);
     const isDetailed = recipe && "ingredients" in recipe;
-    //const { recipe, loading, setRecipe } = useRecipe(id!);
     const nutrition = useSelector((state: RootState) => state.nutrition.nutrition);
 
     useEffect(() => {
@@ -41,7 +39,6 @@ const RecipeDetails = () => {
         if (id) dispatch(fetchNutritionForRecipe(parseInt(id)));
     };
 
-    if (loading) return <p>Laddar recept...</p>;
     if (!detailedRecipe) return <p>Receptet kunde inte hämtas.</p>;
 
     return (
