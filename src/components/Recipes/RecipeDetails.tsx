@@ -1,11 +1,11 @@
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
-import { removeIngredient, fetchRecipeById } from "../../redux/Slices/recipeSlice";
+import { removeIngredient, fetchRecipeById, updateIngredientAmount } from "../../redux/Slices/recipeSlice";
 import { fetchNutritionForRecipe } from "../../redux/Slices/nutritionSlice";
 import FoodSearchAndAdd from "../Food/FoodSearchAndAdd";
 import NutritionTable from "./NutritionTable";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { RecipeDetailsData } from "../../redux/Slices/recipeSlice";
 
 
@@ -28,6 +28,20 @@ const RecipeDetails = () => {
 
     const detailedRecipe = isDetailed ? (recipe as RecipeDetailsData) : null;
 
+    const [updatedAmounts, setUpdatedAmounts] = useState<{ [key: number]: number }>({});
+
+    const handleUpdateIngredientAmount = (foodId: number) => {
+        const newAmount = updatedAmounts[foodId];
+        if (detailedRecipe && newAmount !== undefined) {
+            dispatch(
+                updateIngredientAmount({
+                    recipeId: detailedRecipe.id,
+                    foodId,
+                    newAmountInGrams: newAmount,
+                })
+            );
+        }
+    };
 
     const handleRemoveIngredient = (foodId: number) => {
         if (detailedRecipe) {
@@ -50,6 +64,25 @@ const RecipeDetails = () => {
                     <li key={i}>
                         {ing.foodName} – {ing.amountInGrams} g
                         <button onClick={() => handleRemoveIngredient(ing.foodId)}>Ta bort</button>
+                        <br />
+                        {/* Input to update the amount */}
+                        <input
+                            type="number"
+                            value={
+                                updatedAmounts[ing.foodId] !== undefined
+                                    ? updatedAmounts[ing.foodId]
+                                    : ing.amountInGrams
+                            }
+                            onChange={(e) =>
+                                setUpdatedAmounts({
+                                    ...updatedAmounts,
+                                    [ing.foodId]: Number(e.target.value),
+                                })
+                            }
+                        />
+                        <button onClick={() => handleUpdateIngredientAmount(ing.foodId)}>
+                            Uppdatera mängd
+                        </button>
                     </li>
                 ))}
             </ul>

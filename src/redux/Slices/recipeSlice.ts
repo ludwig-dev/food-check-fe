@@ -109,6 +109,27 @@ export const deleteRecipe = createAsyncThunk(
     }
 );
 
+export const updateIngredientAmount = createAsyncThunk(
+    "recipe/updateIngredientAmount",
+    async (
+        data: { recipeId: number; foodId: number; newAmountInGrams: number },
+        { rejectWithValue }
+    ) => {
+        try {
+            const response = await axios.put(
+                `${API_URL_RECIPES}/${data.recipeId}/ingredients/${data.foodId}`,
+                { newAmountInGrams: data.newAmountInGrams },
+                { withCredentials: true }
+            );
+            return response.data;
+        } catch (error: any) {
+            return rejectWithValue(
+                error.response?.data || "Failed to update ingredient amount"
+            );
+        }
+    }
+);
+
 const recipeSlice = createSlice({
     name: "recipe",
     initialState,
@@ -209,6 +230,26 @@ const recipeSlice = createSlice({
                 state.recipes = state.recipes.filter(recipe => recipe.id !== action.payload);
             })
             .addCase(deleteRecipe.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            })
+            // Update ingredient amount
+            .addCase(updateIngredientAmount.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(updateIngredientAmount.fulfilled, (state, action: PayloadAction<RecipeDetailsData>) => {
+                state.loading = false;
+                state.error = null;
+                const index = state.recipes.findIndex(
+                    (r) => r.id === action.payload.id
+                );
+                if (index !== -1) {
+                    state.recipes[index] = action.payload;
+                } else {
+                    state.recipes.push(action.payload);
+                }
+            })
+            .addCase(updateIngredientAmount.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
             });
