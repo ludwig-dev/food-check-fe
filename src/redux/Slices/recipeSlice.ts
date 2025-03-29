@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction, createAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const API_URL_RECIPES = "http://localhost:8080/api/recipes";
@@ -112,7 +112,13 @@ export const deleteRecipe = createAsyncThunk(
 const recipeSlice = createSlice({
     name: "recipe",
     initialState,
-    reducers: {},
+    reducers: {
+        clearRecipes: (state) => {
+            state.recipes = [];
+            state.loading = false;
+            state.error = null;
+        },
+    },
     extraReducers: (builder) => {
         builder
             // Fetch all recipes
@@ -209,4 +215,5 @@ const recipeSlice = createSlice({
     },
 });
 
+export const { clearRecipes } = recipeSlice.actions;
 export default recipeSlice.reducer;

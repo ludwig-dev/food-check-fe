@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { fetchUserProfile, clearUser } from "./userSlice";
+import { clearRecipes } from "./recipeSlice";
 
 const API_URL_AUTH = "http://localhost:8080/api/auth";
 
@@ -37,6 +38,7 @@ export const logout = createAsyncThunk(
             await axios.post(`${API_URL_AUTH}/logout`, {}, { withCredentials: true });
             dispatch(clearAuth());
             dispatch(clearUser());
+            dispatch(clearRecipes());
         } catch (error) {
             console.error("Logout failed:", error);
         }
