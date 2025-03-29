@@ -1,26 +1,39 @@
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
-import { removeIngredient } from "../../redux/Slices/recipeSlice";
+import { removeIngredient, fetchRecipeById } from "../../redux/Slices/recipeSlice";
 import { fetchNutritionForRecipe } from "../../redux/Slices/nutritionSlice";
 import FoodSearchAndAdd from "../Food/FoodSearchAndAdd";
 import NutritionTable from "./NutritionTable";
-import { useRecipe } from "./useRecipe";
+import { useEffect } from "react";
+import { RecipeDetailsData } from "../../redux/Slices/recipeSlice";
+
 
 
 
 const RecipeDetails = () => {
     const { id } = useParams<{ id: string }>();
     const dispatch = useDispatch<AppDispatch>();
-    const { recipe, loading, setRecipe } = useRecipe(id!);
+    const recipe = useSelector((state: RootState) => state.recipe.recipes.find((r) => r.id === parseInt(id!)));
+    const loading = useSelector((state: RootState) => state.recipe.loading);
+    const isDetailed = recipe && "ingredients" in recipe;
+    //const { recipe, loading, setRecipe } = useRecipe(id!);
     const nutrition = useSelector((state: RootState) => state.nutrition.nutrition);
 
+    useEffect(() => {
+        // If we don't have a recipe or it's not detailed, fetch the full details
+        if (!recipe || !isDetailed) {
+            dispatch(fetchRecipeById(parseInt(id!)));
+        }
+    }, [dispatch, id, recipe, isDetailed]);
+
+
+    const detailedRecipe = isDetailed ? (recipe as RecipeDetailsData) : null;
+
+
     const handleRemoveIngredient = (foodId: number) => {
-        if (recipe) {
-            dispatch(removeIngredient({ recipeId: recipe.id, foodId }));
-            setRecipe((prev) =>
-                prev ? { ...prev, ingredients: prev.ingredients.filter((ing) => ing.foodId !== foodId) } : null
-            );
+        if (detailedRecipe) {
+            dispatch(removeIngredient({ recipeId: detailedRecipe.id, foodId }));
         }
     };
 
@@ -29,14 +42,14 @@ const RecipeDetails = () => {
     };
 
     if (loading) return <p>Laddar recept...</p>;
-    if (!recipe) return <p>Receptet kunde inte hämtas.</p>;
+    if (!detailedRecipe) return <p>Receptet kunde inte hämtas.</p>;
 
     return (
         <div>
-            <h2>{recipe.name}</h2>
+            <h2>{detailedRecipe.name}</h2>
             <h3>🥣 Ingredienser</h3>
             <ul>
-                {recipe.ingredients.map((ing, i) => (
+                {detailedRecipe.ingredients.map((ing, i) => (
                     <li key={i}>
                         {ing.foodName} – {ing.amountInGrams} g
                         <button onClick={() => handleRemoveIngredient(ing.foodId)}>Ta bort</button>

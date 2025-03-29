@@ -21,10 +21,6 @@ export interface Recipe {
     name: string;
 }
 
-export interface RecipeDetails extends Recipe {
-    ingredients: Ingredient[];
-}
-
 interface RecipeState {
     recipes: Recipe[];
     loading: boolean;
@@ -135,7 +131,7 @@ const recipeSlice = createSlice({
             .addCase(createRecipe.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(createRecipe.fulfilled, (state, action: PayloadAction<RecipeDetails>) => {
+            .addCase(createRecipe.fulfilled, (state, action: PayloadAction<RecipeDetailsData>) => {
                 state.recipes.push(action.payload);
                 state.loading = false;
             })
