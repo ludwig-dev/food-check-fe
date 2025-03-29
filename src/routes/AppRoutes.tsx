@@ -38,7 +38,7 @@ const AppRoutes = () => (
             path="/recipes/:id"
             element={
                 <PrivateRoute>
-                    <RecipeDetails/>
+                    <RecipeDetails />
                 </PrivateRoute>
             }
         />
