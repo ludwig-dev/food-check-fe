@@ -28,19 +28,37 @@ const RecipeList = () => {
     };
 
     return (
-        <div>
-            <div className="flex items-center mb-6">
-                <h2>📋 Mina recept</h2>
-                <button onClick={handleCreateRecipe}>Skapa nytt recept</button>
+        <div className="max-w-3xl mx-auto px-4 py-16">
+            <div className="flex justify-between items-center mb-8">
+                <h2 className="text-2xl font-semibold text-gray-900"> Mina recept</h2>
+                <button
+                    onClick={handleCreateRecipe}
+                    className="border border-gray-200 rounded-md px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 transition"
+                >
+                    Skapa nytt recept
+                </button>
             </div>
 
-            {loading && <p>Laddar recept...</p>}
+            {loading && <p className="text-center text-gray-500">Laddar recept...</p>}
 
-            <ul>
+            <ul className="space-y-4">
                 {recipes.map((recipe) => (
-                    <li key={recipe.id}>
-                        <Link to={`/recipes/${recipe.id}`}>{recipe.name}</Link>
-                        <button onClick={() => handleDeleteRecipe(recipe.id)}>Ta bort</button>
+                    <li
+                        key={recipe.id}
+                        className="bg-white rounded-lg shadow-sm p-4 border border-gray-100 flex justify-between items-center"
+                    >
+                        <Link
+                            to={`/recipes/${recipe.id}`}
+                            className="text-base font-medium text-gray-800 hover:underline"
+                        >
+                            {recipe.name}
+                        </Link>
+                        <button
+                            onClick={() => handleDeleteRecipe(recipe.id)}
+                            className="border border-gray-200 rounded-md px-3 py-1 text-sm text-gray-600 hover:bg-gray-50 transition"
+                        >
+                            Ta bort
+                        </button>
                     </li>
                 ))}
             </ul>
