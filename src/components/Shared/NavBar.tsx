@@ -26,8 +26,8 @@ const Navbar = () => {
                     {user ? (
                         <>
                             <li>
-                                <Link to="/profile" className="hover:text-blue-600 transition">
-                                    Profile
+                                <Link to="/recipes" className="hover:text-blue-600 transition">
+                                    Recipes
                                 </Link>
                             </li>
 
@@ -38,6 +38,12 @@ const Navbar = () => {
                                     </Link>
                                 </li>
                             )}
+
+                            <li>
+                                <Link to="/profile" className="hover:text-blue-600 transition">
+                                    Profile
+                                </Link>
+                            </li>
 
                             <li>
                                 <button

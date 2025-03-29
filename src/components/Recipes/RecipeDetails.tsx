@@ -67,7 +67,7 @@ const RecipeDetails = () => {
     return (
         <div className="max-w-3xl mx-auto px-4 py-16">
             <h2 className="text-3xl font-semibold text-center text-gray-900 mb-8">
-                {detailedRecipe.name}
+                Recept: <span className="text-blue-600">{detailedRecipe.name}</span>
             </h2>
             <div className="flex items-center justify-between mb-4">
                 <h3 className="text-xl font-semibold text-gray-800">Ingredienser</h3>
