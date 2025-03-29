@@ -4,14 +4,15 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { fetchRecipes } from "../../redux/Slices/recipeSlice";
 import { Link } from "react-router-dom";
 
-
 const RecipeList = () => {
     const dispatch = useDispatch<AppDispatch>();
     const { recipes, loading, error } = useSelector((state: RootState) => state.recipe);
 
     useEffect(() => {
-        dispatch(fetchRecipes());
-    }, [dispatch]);
+        if (recipes.length === 0) {
+            dispatch(fetchRecipes());
+        }
+    }, [dispatch, recipes.length]);
 
     return (
         <div>
@@ -26,7 +27,6 @@ const RecipeList = () => {
                         <Link to={`/recipes/${recipe.id}`}>{recipe.name}</Link>
                     </li>
                 ))}
-
             </ul>
         </div>
     );
