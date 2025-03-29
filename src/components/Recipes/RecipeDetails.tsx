@@ -4,12 +4,9 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { removeIngredient, fetchRecipeById, updateIngredientAmount } from "../../redux/Slices/recipeSlice";
 import { fetchNutritionForRecipe } from "../../redux/Slices/nutritionSlice";
 import FoodSearchAndAdd from "../Food/FoodSearchAndAdd";
-import NutritionTable from "./NutritionTable";
 import { useEffect, useState } from "react";
 import { RecipeDetailsData } from "../../redux/Slices/recipeSlice";
-
-
-
+import NutritionPopup from "./NutritionPopup";
 
 const RecipeDetails = () => {
     const { id } = useParams<{ id: string }>();
@@ -30,6 +27,8 @@ const RecipeDetails = () => {
 
     const [updatedAmounts, setUpdatedAmounts] = useState<{ [key: number]: number }>({});
 
+    const [isNutritionModalOpen, setIsNutritionModalOpen] = useState(false);
+
     const handleUpdateIngredientAmount = (foodId: number) => {
         const newAmount = updatedAmounts[foodId];
         if (detailedRecipe && newAmount !== undefined) {
@@ -49,8 +48,13 @@ const RecipeDetails = () => {
         }
     };
 
-    const handleLoadNutrition = () => {
-        if (id) dispatch(fetchNutritionForRecipe(parseInt(id)));
+    const [isEditing, setIsEditing] = useState(false);
+
+    const handleShowNutrition = () => {
+        if (id) {
+            dispatch(fetchNutritionForRecipe(parseInt(id)));
+            setIsNutritionModalOpen(true);
+        }
     };
 
     if (!detailedRecipe)
@@ -62,45 +66,66 @@ const RecipeDetails = () => {
 
     return (
         <div className="max-w-3xl mx-auto px-4 py-16">
-            <h2 className="text-4xl font-semibold text-center text-gray-900 mb-10">
+            <h2 className="text-3xl font-semibold text-center text-gray-900 mb-8">
                 {detailedRecipe.name}
             </h2>
-            <h3 className="text-2xl font-semibold text-gray-800 mb-4">🥣 Ingredienser</h3>
+            <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-semibold text-gray-800">Ingredienser</h3>
+                <button
+                    onClick={handleShowNutrition}
+                    className="text-sm text-gray-600 border border-gray-200 rounded-md px-3 py-1 hover:bg-gray-50 transition"
+                >
+                    Visa näringsvärde
+                </button>
+                <button
+                    onClick={() => setIsEditing(!isEditing)}
+                    className="text-sm text-gray-600 border border-gray-200 rounded-md px-3 py-1 hover:bg-gray-50 transition"
+                >
+                    {isEditing ? "Avsluta redigering" : "Redigera"}
+                </button>
+            </div>
             <ul className="space-y-4">
                 {detailedRecipe.ingredients.map((ing) => (
                     <li
                         key={ing.foodId}
-                        className="p-4 bg-gray-50 border border-gray-200 rounded-md flex flex-col sm:flex-row justify-between items-start sm:items-center"
+                        className="bg-white rounded-lg shadow-sm p-4 border border-gray-100"
                     >
-                        <div>
-                            <p className="text-lg font-medium text-gray-900">{ing.foodName}</p>
-                            <p className="text-sm text-gray-600">Mängd: {ing.amountInGrams} g</p>
-                        </div>
-                        <div className="flex items-center gap-4 mt-2 sm:mt-0">
-                            <input
-                                type="number"
-                                value={
-                                    updatedAmounts[ing.foodId] !== undefined
-                                        ? updatedAmounts[ing.foodId]
-                                        : ing.amountInGrams
-                                }
-                                onChange={(e) =>
-                                    setUpdatedAmounts({
-                                        ...updatedAmounts,
-                                        [ing.foodId]: Number(e.target.value),
-                                    })
-                                }
-                                className="w-20 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
-                            />
-                            <button
-                                onClick={() => handleUpdateIngredientAmount(ing.foodId)}
-                                className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
-                            >
-                                Uppdatera
-                            </button>
+                        <div className="flex justify-between items-center">
+                            <div>
+                                <p className="text-base font-medium text-gray-800">
+                                    {ing.foodName}
+                                </p>
+                                {isEditing ? (
+                                    <div className="flex items-center gap-2 mt-1">
+                                        <input
+                                            type="number"
+                                            value={
+                                                updatedAmounts[ing.foodId] !== undefined
+                                                    ? updatedAmounts[ing.foodId]
+                                                    : ing.amountInGrams
+                                            }
+                                            onChange={(e) =>
+                                                setUpdatedAmounts({
+                                                    ...updatedAmounts,
+                                                    [ing.foodId]: Number(e.target.value),
+                                                })
+                                            }
+                                            className="w-16 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm"
+                                        />
+                                        <button
+                                            onClick={() => handleUpdateIngredientAmount(ing.foodId)}
+                                            className="border border-gray-200 rounded-md px-2 py-1 text-sm text-gray-600 hover:bg-gray-50 transition"
+                                        >
+                                            Uppdatera
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <p className="text-sm text-gray-600">Mängd: {ing.amountInGrams} g</p>
+                                )}
+                            </div>
                             <button
                                 onClick={() => handleRemoveIngredient(ing.foodId)}
-                                className="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
+                                className="border border-gray-200 rounded-md px-3 py-1 text-sm text-gray-600 hover:bg-gray-50 transition"
                             >
                                 Ta bort
                             </button>
@@ -109,24 +134,13 @@ const RecipeDetails = () => {
                 ))}
             </ul>
 
+            <FoodSearchAndAdd />
 
-            <div className="mt-10">
-                <FoodSearchAndAdd />
-            </div>
-
-            <div className="mt-8 text-center">
-                <button
-                    onClick={handleLoadNutrition}
-                    className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
-                >
-                    Visa näringsvärde
-                </button>
-            </div>
-
-            {nutrition.length > 0 && (
-                <div className="mt-10">
-                    <NutritionTable nutrition={nutrition} />
-                </div>
+            {isNutritionModalOpen && (
+                <NutritionPopup
+                    nutrition={nutrition}
+                    onClose={() => setIsNutritionModalOpen(false)}
+                />
             )}
         </div>
     );

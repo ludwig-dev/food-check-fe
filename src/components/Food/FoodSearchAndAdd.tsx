@@ -35,12 +35,12 @@ const FoodSearchAndAdd = () => {
 
     if (!toggle) {
         return (
-            <div className="mt-8">
+            <div className="mt-8 text-center">
                 <button
                     onClick={handleToggle}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+                    className="border border-gray-200 rounded-md px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 transition"
                 >
-                    Visa sökfält
+                    Lägg till fler ingredienser
                 </button>
             </div>
         );
@@ -48,26 +48,28 @@ const FoodSearchAndAdd = () => {
 
     return (
         <div className="mt-8">
-            <button
-                onClick={handleToggle}
-                className="mb-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
-            >
-                Dölj sökfält
-            </button>
-            <h4 className="text-xl font-semibold text-gray-800 mb-4">
-                🔍 Sök och lägg till ingrediens
-            </h4>
+            <div className="flex items-center justify-between mb-4">
+                <h4 className="text-xl font-semibold text-gray-800">
+                    Sök och lägg till ingrediens
+                </h4>
+                <button
+                    onClick={handleToggle}
+                    className="border border-gray-200 rounded-md px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 transition"
+                >
+                    Dölj sökfält
+                </button>
+            </div>
             <div className="flex gap-4 mb-4">
                 <input
                     type="text"
                     placeholder="Sök efter livsmedel"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm"
                 />
                 <button
                     onClick={handleSearch}
-                    className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
+                    className="border border-gray-200 rounded-md px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 transition"
                 >
                     Sök
                 </button>
@@ -91,11 +93,11 @@ const FoodSearchAndAdd = () => {
                                         [item.id]: Number(e.target.value),
                                     })
                                 }
-                                className="w-20 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                                className="w-20 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm"
                             />
                             <button
                                 onClick={() => handleAdd(item.id)}
-                                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+                                className="border border-gray-200 rounded-md px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 transition"
                             >
                                 Lägg till
                             </button>
