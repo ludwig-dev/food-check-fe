@@ -9,7 +9,7 @@ const API_URL_AUTH = "http://localhost:8080/api/auth";
 
 export const register = createAsyncThunk(
     "auth/register",
-    async ({ email, username, password }: { email: string; username: string; password: string }, { dispatch, rejectWithValue }) => {
+    async ({ email, username, password }: { email: string; username: string; password: string }, { rejectWithValue }) => {
         try {
             const response = await axios.post(`${API_URL_AUTH}/register`, { email, username, password }, { withCredentials: true });
             return response.data;

@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction, createAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const API_URL_RECIPES = "http://localhost:8080/api/recipes";
