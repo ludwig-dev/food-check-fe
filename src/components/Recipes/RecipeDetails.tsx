@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { fetchNutritionForRecipe } from "../../redux/Slices/nutritionSlice";
 import { Nutrition } from "../../redux/Slices/nutritionSlice";
 import FoodSearchAndAdd from "../Food/FoodSearchAndAdd";
+import { removeIngredient } from "../../redux/Slices/recipeSlice";
 import axios from "axios";
 
 interface Ingredient {
@@ -86,6 +87,12 @@ const RecipeDetails = () => {
         fetchRecipe();
     }, [id]);
 
+    const handleRemoveIngredient = (foodId: number) => {
+        if (recipe) {
+            dispatch(removeIngredient({ recipeId: recipe.id, foodId }));
+        }
+    };
+
     const handleLoadNutrition = () => {
         if (id) dispatch(fetchNutritionForRecipe(parseInt(id)));
     };
@@ -101,6 +108,7 @@ const RecipeDetails = () => {
                 {recipe.ingredients.map((ing, i) => (
                     <li key={i}>
                         {ing.foodName} – {ing.amountInGrams} g
+                        <button onClick={() => handleRemoveIngredient(ing.foodId)}>Ta bort</button>
                     </li>
                 ))}
             </ul>
