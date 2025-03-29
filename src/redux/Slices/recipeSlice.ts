@@ -3,9 +3,26 @@ import axios from "axios";
 
 const API_URL_RECIPES = "http://localhost:8080/api/recipes";
 
+
+export interface RecipeDetailsData {
+    id: number;
+    name: string;
+    ingredients: Ingredient[];
+}
+
+export interface Ingredient {
+    foodId: number;
+    foodName: string;
+    amountInGrams: number;
+}
+
 export interface Recipe {
     id: number;
     name: string;
+}
+
+export interface RecipeDetails extends Recipe {
+    ingredients: Ingredient[];
 }
 
 interface RecipeState {
@@ -37,6 +54,18 @@ export const createRecipe = createAsyncThunk(
             return response.data;
         } catch (error: any) {
             return rejectWithValue(error.response?.data || "Failed to create recipe");
+        }
+    }
+);
+
+export const fetchRecipeById = createAsyncThunk(
+    "recipe/fetchRecipeById",
+    async (id: number, { rejectWithValue }) => {
+        try {
+            const response = await axios.get(`${API_URL_RECIPES}/${id}`, { withCredentials: true });
+            return response.data;
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data || "Failed to fetch recipe details");
         }
     }
 );
@@ -90,6 +119,7 @@ const recipeSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
+            // Fetch all recipes
             .addCase(fetchRecipes.pending, (state) => {
                 state.loading = true;
             })
@@ -101,42 +131,82 @@ const recipeSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload as string;
             })
-            .addCase(createRecipe.fulfilled, (state, action: PayloadAction<Recipe>) => {
-                state.recipes.push(action.payload);
+            // Create a new recipe
+            .addCase(createRecipe.pending, (state) => {
+                state.loading = true;
             })
-            // Handle add ingredient
-            .addCase(addIngredient.fulfilled, (state, action: PayloadAction<Recipe>) => {
-                const index = state.recipes.findIndex((recipe) => recipe.id === action.payload.id);
+            .addCase(createRecipe.fulfilled, (state, action: PayloadAction<RecipeDetails>) => {
+                state.recipes.push(action.payload);
+                state.loading = false;
+            })
+            .addCase(createRecipe.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            })
+            // Fetch recipe by ID
+            .addCase(fetchRecipeById.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(fetchRecipeById.fulfilled, (state, action: PayloadAction<RecipeDetailsData>) => {
+                state.loading = false;
+                const index = state.recipes.findIndex(r => r.id === action.payload.id);
                 if (index !== -1) {
                     state.recipes[index] = action.payload;
+                } else {
+                    state.recipes.push(action.payload);
+                }
+            })
+            .addCase(fetchRecipeById.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            })
+            // Add ingredient to recipe
+            .addCase(addIngredient.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(addIngredient.fulfilled, (state, action: PayloadAction<RecipeDetailsData>) => {
+                state.loading = false;
+                const index = state.recipes.findIndex(r => r.id === action.payload.id);
+                if (index !== -1) {
+                    state.recipes[index] = action.payload;
+                }
+                else {
+                    state.recipes.push(action.payload);
                 }
             })
             .addCase(addIngredient.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
-            }
-            )
-            // Handle remove ingredient
-            .addCase(removeIngredient.fulfilled, (state, action: PayloadAction<Recipe>) => {
-                const index = state.recipes.findIndex((recipe) => recipe.id === action.payload.id);
+            })
+            // Remove ingredient from recipe
+            .addCase(removeIngredient.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(removeIngredient.fulfilled, (state, action: PayloadAction<RecipeDetailsData>) => {
+                state.loading = false;
+                state.error = null;
+                const index = state.recipes.findIndex(r => r.id === action.payload.id);
                 if (index !== -1) {
                     state.recipes[index] = action.payload;
+                }
+                else {
+                    state.recipes.push(action.payload);
                 }
             })
             .addCase(removeIngredient.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
             })
-            // Handle delete recipe
+            // Delete recipe
+            .addCase(deleteRecipe.pending, (state) => {
+                state.loading = true;
+            })
             .addCase(deleteRecipe.fulfilled, (state, action: PayloadAction<number>) => {
-                state.recipes = state.recipes.filter((recipe) => recipe.id !== action.payload);
+                state.loading = false;
+                state.error = null;
+                state.recipes = state.recipes.filter(recipe => recipe.id !== action.payload);
             })
             .addCase(deleteRecipe.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload as string;
-            })
-            // Handle create recipe error
-            .addCase(createRecipe.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
             });

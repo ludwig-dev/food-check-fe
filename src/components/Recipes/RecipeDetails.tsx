@@ -7,17 +7,7 @@ import FoodSearchAndAdd from "../Food/FoodSearchAndAdd";
 import NutritionTable from "./NutritionTable";
 import { useRecipe } from "./useRecipe";
 
-interface Ingredient {
-    foodId: number;
-    foodName: string;
-    amountInGrams: number;
-}
 
-export interface RecipeDetailsData {
-    id: number;
-    name: string;
-    ingredients: Ingredient[];
-}
 
 const RecipeDetails = () => {
     const { id } = useParams<{ id: string }>();

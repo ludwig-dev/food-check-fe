@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { RecipeDetailsData } from "./RecipeDetails";
+import { RecipeDetailsData } from "../../redux/Slices/recipeSlice";
 import { fetchRecipeById } from "../../service/recipeService";
 
 export const useRecipe = (id: string) => {
