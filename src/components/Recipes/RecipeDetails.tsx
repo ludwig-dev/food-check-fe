@@ -53,45 +53,81 @@ const RecipeDetails = () => {
         if (id) dispatch(fetchNutritionForRecipe(parseInt(id)));
     };
 
-    if (!detailedRecipe) return <p>Receptet kunde inte hämtas.</p>;
+    if (!detailedRecipe)
+        return (
+            <p className="text-center text-gray-500 mt-8">
+                Receptet kunde inte hämtas.
+            </p>
+        );
 
     return (
-        <div>
-            <h2>{detailedRecipe.name}</h2>
-            <h3>🥣 Ingredienser</h3>
-            <ul>
-                {detailedRecipe.ingredients.map((ing, i) => (
-                    <li key={i}>
-                        {ing.foodName} – {ing.amountInGrams} g
-                        <button onClick={() => handleRemoveIngredient(ing.foodId)}>Ta bort</button>
-                        <br />
-                        {/* Input to update the amount */}
-                        <input
-                            type="number"
-                            value={
-                                updatedAmounts[ing.foodId] !== undefined
-                                    ? updatedAmounts[ing.foodId]
-                                    : ing.amountInGrams
-                            }
-                            onChange={(e) =>
-                                setUpdatedAmounts({
-                                    ...updatedAmounts,
-                                    [ing.foodId]: Number(e.target.value),
-                                })
-                            }
-                        />
-                        <button onClick={() => handleUpdateIngredientAmount(ing.foodId)}>
-                            Uppdatera mängd
-                        </button>
+        <div className="max-w-3xl mx-auto px-4 py-16">
+            <h2 className="text-4xl font-semibold text-center text-gray-900 mb-10">
+                {detailedRecipe.name}
+            </h2>
+            <h3 className="text-2xl font-semibold text-gray-800 mb-4">🥣 Ingredienser</h3>
+            <ul className="space-y-4">
+                {detailedRecipe.ingredients.map((ing) => (
+                    <li
+                        key={ing.foodId}
+                        className="p-4 bg-gray-50 border border-gray-200 rounded-md flex flex-col sm:flex-row justify-between items-start sm:items-center"
+                    >
+                        <div>
+                            <p className="text-lg font-medium text-gray-900">{ing.foodName}</p>
+                            <p className="text-sm text-gray-600">Mängd: {ing.amountInGrams} g</p>
+                        </div>
+                        <div className="flex items-center gap-4 mt-2 sm:mt-0">
+                            <input
+                                type="number"
+                                value={
+                                    updatedAmounts[ing.foodId] !== undefined
+                                        ? updatedAmounts[ing.foodId]
+                                        : ing.amountInGrams
+                                }
+                                onChange={(e) =>
+                                    setUpdatedAmounts({
+                                        ...updatedAmounts,
+                                        [ing.foodId]: Number(e.target.value),
+                                    })
+                                }
+                                className="w-20 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                            />
+                            <button
+                                onClick={() => handleUpdateIngredientAmount(ing.foodId)}
+                                className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+                            >
+                                Uppdatera
+                            </button>
+                            <button
+                                onClick={() => handleRemoveIngredient(ing.foodId)}
+                                className="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
+                            >
+                                Ta bort
+                            </button>
+                        </div>
                     </li>
                 ))}
             </ul>
 
-            <button onClick={handleLoadNutrition}>Visa näringsvärde</button>
 
-            {nutrition.length > 0 && <NutritionTable nutrition={nutrition} />}
+            <div className="mt-10">
+                <FoodSearchAndAdd />
+            </div>
 
-            <FoodSearchAndAdd />
+            <div className="mt-8 text-center">
+                <button
+                    onClick={handleLoadNutrition}
+                    className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
+                >
+                    Visa näringsvärde
+                </button>
+            </div>
+
+            {nutrition.length > 0 && (
+                <div className="mt-10">
+                    <NutritionTable nutrition={nutrition} />
+                </div>
+            )}
         </div>
     );
 };
