@@ -7,6 +7,8 @@ import FoodSearchAndAdd from "../Food/FoodSearchAndAdd";
 import { useEffect, useState } from "react";
 import { RecipeDetailsData } from "../../redux/Slices/recipeSlice";
 import NutritionPopup from "./NutritionPopup";
+import RecipeIcons from "../Shared/Icons/RecipeIcons";
+import UserIcons from "../Shared/Icons/UserIcons";
 
 const RecipeDetails = () => {
     const { id } = useParams<{ id: string }>();
@@ -71,19 +73,23 @@ const RecipeDetails = () => {
             </h2>
             <div className="flex items-center justify-between mb-4">
                 <h3 className="text-xl font-semibold text-gray-800">Ingredienser</h3>
-                <button
-                    onClick={handleShowNutrition}
-                    className="text-sm text-gray-600 border border-gray-200 rounded-md px-3 py-1 hover:bg-gray-50 transition"
-                >
-                    Visa näringsvärde
-                </button>
-                <button
-                    onClick={() => setIsEditing(!isEditing)}
-                    className="text-sm text-gray-600 border border-gray-200 rounded-md px-3 py-1 hover:bg-gray-50 transition"
-                >
-                    {isEditing ? "Avsluta redigering" : "Redigera"}
-                </button>
+
+                <div className="flex items-center gap-2 ml-auto">
+                    <button
+                        onClick={handleShowNutrition}
+                        className="text-sm text-gray-600 border rounded-md px-2 py-1 hover:bg-gray-200 transition"
+                    >
+                        <RecipeIcons.ChartColumn size={22} className="opacity-100" />
+                    </button>
+                    <button
+                        onClick={() => setIsEditing(!isEditing)}
+                        className="text-sm text-gray-600 border rounded-md px-2 py-1 hover:bg-gray-200 transition"
+                    >
+                        {isEditing ? <RecipeIcons.Done size={22} className="opacity-100" /> : <UserIcons.Edit size={22} className="opacity-100" />}
+                    </button>
+                </div>
             </div>
+
             <ul className="space-y-4">
                 {detailedRecipe.ingredients.map((ing) => (
                     <li
@@ -125,9 +131,9 @@ const RecipeDetails = () => {
                             </div>
                             <button
                                 onClick={() => handleRemoveIngredient(ing.foodId)}
-                                className="border border-gray-200 rounded-md px-3 py-1 text-sm text-gray-600 hover:bg-gray-50 transition"
+                                className="border border-gray-200 rounded-md px-2 py-1 text-gray-600 hover:bg-red-400 transition"
                             >
-                                Ta bort
+                                <RecipeIcons.Delete size={20} className="opacity-80" />
                             </button>
                         </div>
                     </li>

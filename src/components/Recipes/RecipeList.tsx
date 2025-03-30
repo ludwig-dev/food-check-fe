@@ -31,12 +31,12 @@ const RecipeList = () => {
     return (
         <div className="max-w-3xl mx-auto px-4 py-16">
             <div className="flex justify-between items-center mb-8">
-                <h2 className="text-2xl font-semibold text-gray-900"> Mina recept</h2>
+                <h2 className="text-2xl font-semibold text-gray-900"> Mina recept</h2> 
                 <button
                     onClick={handleCreateRecipe}
-                    className="border border-gray-200 rounded-md px-3 py-1 text-sm text-gray-600 hover:bg-green-400 transition"
+                    className="border rounded-md px-2 py-1 text-gray-600 hover:bg-gray-200 transition"
                 >
-                    <RecipeIcons.Add size={24} className="opacity-80" />
+                    <RecipeIcons.Add size={22} className="opacity-80" />
 
                 </button>
             </div>
@@ -57,7 +57,7 @@ const RecipeList = () => {
                         </Link>
                         <button
                             onClick={() => handleDeleteRecipe(recipe.id)}
-                            className="border border-gray-200 rounded-md px-3 py-1 text-sm text-gray-600 hover:bg-red-400 transition"
+                            className="border border-gray-400 rounded-md px-3 py-1 text-sm text-gray-600 hover:bg-red-400 transition"
                         >
                             <RecipeIcons.Delete size={20} className="opacity-80" />
                         </button>

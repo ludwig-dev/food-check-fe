@@ -5,6 +5,7 @@ import { updateUsername, updateEmail } from "../../redux/Slices/userSlice";
 import EditableField from "./EditableField";
 import MessageBanner from "../Shared/MessageBanner";
 import UserIcons from "../Shared/Icons/UserIcons";
+import RecipeIcons from "../Shared/Icons/RecipeIcons";
 
 
 const Profile = () => {
@@ -53,9 +54,12 @@ const Profile = () => {
             {/* Account Info header with edit toggle */}
             <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-semibold text-gray-800">Account Info</h3>
-                <button onClick={() => setIsEditing((prev) => !prev)}>
-                    <UserIcons.Edit size={20} className="w-5 h-5 mr-3" />
-                </button>
+                    <button
+                        onClick={() => setIsEditing(!isEditing)}
+                        className="text-sm text-gray-600 border rounded-md px-2 py-1 hover:bg-gray-200 transition"
+                    >
+                        {isEditing ? <RecipeIcons.Done size={22} className="opacity-100" /> : <UserIcons.Edit size={22} className="opacity-100" />}
+                    </button>
             </div>
 
             <EditableField
