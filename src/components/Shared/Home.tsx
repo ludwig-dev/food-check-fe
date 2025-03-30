@@ -10,7 +10,7 @@ const Home = () => {
         return (
             <div className="min-h-screen bg-gray-50 px-4 pt-20">
                 <div className="text-center">
-                    <h1 className="text-4xl font-bold text-gray-900 mb-4">Welcome to MyApp 👋</h1>
+                    <h1 className="text-4xl font-bold text-gray-900 mb-4">Welcome to food-check 👋</h1>
                     <p className="text-gray-600 mb-2">You are signed in</p>
                     <p className="text-sm text-gray-500 mt-2">
                         Click{" "}
@@ -29,8 +29,8 @@ const Home = () => {
             <div className="min-h-screen bg-gray-50 px-4 pt-20">
 
                 <div className="text-center">
-                    <h1 className="text-4xl font-bold text-gray-900 mb-4">Welcome to MyApp 👋</h1>
-                    <p className="text-gray-600 mb-8">Manage your profile, access admin features, and more.</p>
+                    <h1 className="text-4xl font-bold text-gray-900 mb-4">Welcome to food-check 👋</h1>
+                    <p className="text-gray-600 mb-8">Manage your recipes and check your nutrition</p>
 
                     <div className="flex flex-col sm:flex-row justify-center gap-4">
                         <Link

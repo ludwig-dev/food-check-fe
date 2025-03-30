@@ -1,3 +1,5 @@
+import RecipeIcons from "../Shared/Icons/RecipeIcons";
+
 interface EditableFieldProps {
     label: string;
     value: string;
@@ -20,9 +22,9 @@ const EditableField = ({ value, onChange, onSave, isEditing, Icon }: EditableFie
                 />
                 <button
                     onClick={onSave}
-                    className="px-3 py-1 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+                    className="border border-gray-200 rounded-md px-2 py-1 text-sm text-gray-600 hover:bg-gray-50 transition"
                 >
-                    Update
+                    <RecipeIcons.Update size={20} className="opacity-80" />
                 </button>
             </>
         ) : (

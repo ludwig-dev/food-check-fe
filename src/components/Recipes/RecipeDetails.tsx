@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { removeIngredient, fetchRecipeById, updateIngredientAmount } from "../../redux/Slices/recipeSlice";
@@ -14,6 +14,7 @@ const RecipeDetails = () => {
     const { id } = useParams<{ id: string }>();
     const dispatch = useDispatch<AppDispatch>();
     const recipe = useSelector((state: RootState) => state.recipe.recipes.find((r) => r.id === parseInt(id!)));
+    const navigate = useNavigate();
     const isDetailed = recipe && "ingredients" in recipe;
     const nutrition = useSelector((state: RootState) => state.nutrition.nutrition);
 
@@ -68,9 +69,21 @@ const RecipeDetails = () => {
 
     return (
         <div className="max-w-3xl mx-auto px-4 py-16">
-            <h2 className="text-3xl font-semibold text-center text-gray-900 mb-8">
-                Recept: <span className="text-blue-600">{detailedRecipe.name}</span>
-            </h2>
+            <div className="flex items-center justify-between mb-8">
+                <button
+                    onClick={() => navigate(-1)}
+                    className="text-sm text-gray-600 border rounded-md px-3 py-1 hover:bg-gray-200 transition"
+                >
+                    <RecipeIcons.GoBack size={22} className="opacity-100" />
+                </button>
+
+                <h2 className="text-3xl font-semibold text-gray-900 text-center">
+                    Recept: <span className="text-blue-600">{detailedRecipe.name}</span>
+                </h2>
+
+                {/* Invisible spacer to balance the layout */}
+                <div className="w-[90px]"></div>
+            </div>
             <div className="flex items-center justify-between mb-4">
                 <h3 className="text-xl font-semibold text-gray-800">Ingredienser</h3>
 
@@ -122,7 +135,7 @@ const RecipeDetails = () => {
                                             onClick={() => handleUpdateIngredientAmount(ing.foodId)}
                                             className="border border-gray-200 rounded-md px-2 py-1 text-sm text-gray-600 hover:bg-gray-50 transition"
                                         >
-                                            Uppdatera
+                                            <RecipeIcons.Update size={20} className="opacity-80" />
                                         </button>
                                     </div>
                                 ) : (
