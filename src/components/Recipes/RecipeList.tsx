@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { fetchRecipes, createRecipe, deleteRecipe } from "../../redux/Slices/recipeSlice";
 import { Link } from "react-router-dom";
+import RecipeIcons from "../Shared/Icons/RecipeIcons";
 
 const RecipeList = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -33,9 +34,10 @@ const RecipeList = () => {
                 <h2 className="text-2xl font-semibold text-gray-900"> Mina recept</h2>
                 <button
                     onClick={handleCreateRecipe}
-                    className="border border-gray-200 rounded-md px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 transition"
+                    className="border border-gray-200 rounded-md px-3 py-1 text-sm text-gray-600 hover:bg-green-400 transition"
                 >
-                    Skapa nytt recept
+                    <RecipeIcons.Add size={24} className="opacity-80" />
+
                 </button>
             </div>
 
@@ -55,9 +57,9 @@ const RecipeList = () => {
                         </Link>
                         <button
                             onClick={() => handleDeleteRecipe(recipe.id)}
-                            className="border border-gray-200 rounded-md px-3 py-1 text-sm text-gray-600 hover:bg-gray-50 transition"
+                            className="border border-gray-200 rounded-md px-3 py-1 text-sm text-gray-600 hover:bg-red-400 transition"
                         >
-                            Ta bort
+                            <RecipeIcons.Delete size={20} className="opacity-80" />
                         </button>
                     </li>
                 ))}

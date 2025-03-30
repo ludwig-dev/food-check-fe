@@ -6,7 +6,7 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { useNavigate } from "react-router-dom";
 import AuthForm from "./AuthForm";
 
-import UserIcons from "../Shared/UserIcons";
+import UserIcons from "../Shared/Icons/UserIcons";
 
 const Login = () => {
     const dispatch = useDispatch<AppDispatch>();

@@ -1,5 +1,5 @@
 import React, { useState, FormEvent } from "react";
-import UserIcons from "../Shared/UserIcons";
+import UserIcons from "../Shared/Icons/UserIcons";
 
 interface SearchBarProps {
     onSearch: (username: string) => void;

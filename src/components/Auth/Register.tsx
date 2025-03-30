@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { register } from "../../redux/Slices/authSlice";
 
-import UserIcons from "../Shared/UserIcons";
+import UserIcons from "../Shared/Icons/UserIcons";
 import AuthForm from "./AuthForm";
 
 const Register = () => {

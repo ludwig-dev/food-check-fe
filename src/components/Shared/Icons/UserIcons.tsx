@@ -1,10 +1,10 @@
-import Email from "./Icons/email.svg";
-import Lock from "./Icons/lock.svg";
-import UserHead from "./Icons/user.svg";
-import Briefcase from "./Icons/briefcase.svg";
-import Hashtag from "./Icons/hashtag.svg";
-import Edit from "./Icons/edit.svg";
-import Search from "./Icons/search.svg";
+import Email from "./Users/email.svg";
+import Lock from "./Users/lock.svg";
+import UserHead from "./Users/user.svg";
+import Briefcase from "./Users/briefcase.svg";
+import Hashtag from "./Users/hashtag.svg";
+import Edit from "./Users/edit.svg";
+import Search from "./Users/search.svg";
 
 export const UserIcons = {
   Email: ({ size = 24, className = "" }: { size?: number; className?: string }) => <img src={Email} alt="Email" width={size} height={size} className={className} />,

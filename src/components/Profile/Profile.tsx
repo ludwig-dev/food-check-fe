@@ -4,7 +4,7 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { updateUsername, updateEmail } from "../../redux/Slices/userSlice";
 import EditableField from "./EditableField";
 import MessageBanner from "../Shared/MessageBanner";
-import UserIcons from "../Shared/UserIcons";
+import UserIcons from "../Shared/Icons/UserIcons";
 
 
 const Profile = () => {
