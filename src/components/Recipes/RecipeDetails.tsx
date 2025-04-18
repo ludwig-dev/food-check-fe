@@ -12,50 +12,46 @@ import UserIcons from "../Shared/Icons/UserIcons";
 
 const RecipeDetails = () => {
     const { id } = useParams<{ id: string }>();
+    const numericId = parseInt(id?.split('-')[0] || '', 10);
+
     const dispatch = useDispatch<AppDispatch>();
-    const recipe = useSelector((state: RootState) => state.recipe.recipes.find((r) => r.id === parseInt(id!)));
     const navigate = useNavigate();
-    const isDetailed = recipe && "ingredients" in recipe;
-    const nutrition = useSelector((state: RootState) => state.nutrition.nutrition);
 
-    useEffect(() => {
-        // If we don't have a recipe or it's not detailed, fetch the full details
-        if (!recipe || !isDetailed) {
-            dispatch(fetchRecipeById(parseInt(id!)));
-        }
-    }, [dispatch, id, recipe, isDetailed]);
+    const recipe = useSelector((state: RootState) =>
+        state.recipe.recipes.find((r) => r.id === numericId)
+    );
 
-
+    const isDetailed = recipe && 'ingredients' in recipe;
     const detailedRecipe = isDetailed ? (recipe as RecipeDetailsData) : null;
 
-    const [updatedAmounts, setUpdatedAmounts] = useState<{ [key: number]: number }>({});
+    const nutrition = useSelector((state: RootState) => state.nutrition.nutrition);
 
+    const [updatedAmounts, setUpdatedAmounts] = useState<{ [key: number]: number }>({});
     const [isNutritionModalOpen, setIsNutritionModalOpen] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+
+    useEffect(() => {
+        if (!numericId || (!recipe || !isDetailed)) {
+            dispatch(fetchRecipeById(numericId));
+        }
+    }, [dispatch, numericId, recipe, isDetailed]);
 
     const handleUpdateIngredientAmount = (foodId: number) => {
         const newAmount = updatedAmounts[foodId];
         if (detailedRecipe && newAmount !== undefined) {
-            dispatch(
-                updateIngredientAmount({
-                    recipeId: detailedRecipe.id,
-                    foodId,
-                    newAmountInGrams: newAmount,
-                })
-            );
+            dispatch(updateIngredientAmount({ recipeId: numericId, foodId, newAmountInGrams: newAmount }));
         }
     };
 
     const handleRemoveIngredient = (foodId: number) => {
         if (detailedRecipe) {
-            dispatch(removeIngredient({ recipeId: detailedRecipe.id, foodId }));
+            dispatch(removeIngredient({ recipeId: numericId, foodId }));
         }
     };
 
-    const [isEditing, setIsEditing] = useState(false);
-
     const handleShowNutrition = () => {
-        if (id) {
-            dispatch(fetchNutritionForRecipe(parseInt(id)));
+        if (numericId) {
+            dispatch(fetchNutritionForRecipe(numericId));
             setIsNutritionModalOpen(true);
         }
     };

@@ -28,10 +28,19 @@ const RecipeList = () => {
         }
     };
 
+    const slugify = (text: string) =>
+        text
+            .toLowerCase()
+            .trim()
+            .replace(/\s+/g, '-')        // spaces to dashes
+            .replace(/[^\w\-]+/g, '')    // remove special chars
+            .replace(/\-\-+/g, '-');     // collapse multiple dashes
+
+
     return (
         <div className="max-w-3xl mx-auto px-4 py-16">
             <div className="flex justify-between items-center mb-8">
-                <h2 className="text-2xl font-semibold text-gray-900"> Mina recept</h2> 
+                <h2 className="text-2xl font-semibold text-gray-900"> Mina recept</h2>
                 <button
                     onClick={handleCreateRecipe}
                     className="border rounded-md px-2 py-1 text-gray-600 hover:bg-gray-200 transition"
@@ -50,7 +59,7 @@ const RecipeList = () => {
                         className="bg-white rounded-lg shadow-sm p-4 border border-gray-100 flex justify-between items-center"
                     >
                         <Link
-                            to={`/recipes/${recipe.id}`}
+                            to={`/recipes/${recipe.id}-${slugify(recipe.name)}`}
                             className="text-base font-medium text-gray-800 hover:underline"
                         >
                             {recipe.name}
