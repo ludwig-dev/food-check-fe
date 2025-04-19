@@ -4,10 +4,11 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { searchFood } from "../../redux/Slices/foodSlice";
 import { addIngredient } from "../../redux/Slices/recipeSlice";
 import { useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const FoodSearchAndAdd = () => {
     const { id } = useParams();
-    const recipeId = parseInt(id?.split("-")[0] || "", 10);    
+    const recipeId = parseInt(id?.split("-")[0] || "", 10);
 
     const dispatch = useDispatch<AppDispatch>();
     const { searchResults, loading } = useSelector((state: RootState) => state.food);
@@ -21,11 +22,22 @@ const FoodSearchAndAdd = () => {
         if (query.trim()) dispatch(searchFood(query));
     };
 
-    const handleAdd = (foodId: number) => {
+    const handleAdd = (foodId: number, foodName: string) => {
         const amountInGrams = amountMap[foodId];
-        if (!amountInGrams || amountInGrams <= 0) return;
+        if (!amountInGrams || amountInGrams <= 0) {
+            toast.error("Ange en giltig mängd i gram!");
+            return;
+        }
 
-        dispatch(addIngredient({ recipeId, foodId, amountInGrams }));
+        dispatch(addIngredient({ recipeId, foodId, amountInGrams }))
+            .unwrap()
+            .then((response) => {
+                console.log(response);
+                toast.success("La till " + foodName + " i receptet!");
+            })
+            .catch((error: any) => {
+                toast.error("Misslyckades: " + error);
+            });
         setAmountMap({ ...amountMap, [foodId]: 0 }); // reset
     };
 
@@ -96,7 +108,7 @@ const FoodSearchAndAdd = () => {
                                 className="w-20 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm"
                             />
                             <button
-                                onClick={() => handleAdd(item.id)}
+                                onClick={() => handleAdd(item.id, item.name)}
                                 className="border border-gray-200 rounded-md px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 transition"
                             >
                                 Lägg till
