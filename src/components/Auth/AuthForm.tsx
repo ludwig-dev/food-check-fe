@@ -1,5 +1,4 @@
 import React from "react";
-import MessageBanner from "../Shared/MessageBanner";
 
 interface InputField {
     icon: React.FC<{ size?: number; className?: string }>;
@@ -14,7 +13,6 @@ interface AuthFormProps {
     title: string;
     fields: InputField[];
     onSubmit: (e: React.FormEvent) => void;
-    message: string;
     submitLabel: string;
     loading?: boolean;
     footer?: React.ReactNode;
@@ -24,7 +22,6 @@ const AuthForm = ({
     title,
     fields,
     onSubmit,
-    message,
     submitLabel,
     loading = false,
     footer,
@@ -34,7 +31,6 @@ const AuthForm = ({
             <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
                 <h2 className="text-3xl font-semibold text-gray-800 text-center mb-6">{title}</h2>
 
-                <MessageBanner message={message} />
 
                 <form onSubmit={onSubmit} className="space-y-4">
                     {fields.map((field, index) => (
@@ -59,8 +55,8 @@ const AuthForm = ({
                         type="submit"
                         disabled={loading}
                         className={`w-full py-2.5 rounded-md text-white font-medium transition-transform duration-200 ${loading
-                                ? "bg-blue-300 cursor-not-allowed"
-                                : "bg-blue-600 hover:bg-blue-700 hover:scale-[1.02]"
+                            ? "bg-blue-300 cursor-not-allowed"
+                            : "bg-blue-600 hover:bg-blue-700 hover:scale-[1.02]"
                             }`}
                     >
                         {loading ? `${submitLabel}...` : submitLabel}

@@ -5,7 +5,7 @@ import { fetchUserProfile } from "../../redux/Slices/userSlice";
 import { AppDispatch, RootState } from "../../redux/store";
 import { useNavigate } from "react-router-dom";
 import AuthForm from "./AuthForm";
-
+import toast from "react-hot-toast";
 import UserIcons from "../Shared/Icons/UserIcons";
 
 const Login = () => {
@@ -15,22 +15,26 @@ const Login = () => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [message, setMessage] = useState("");
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setMessage("");
 
-        const result = await dispatch(login({ email, password }));
-
-        if (result.meta.requestStatus === "fulfilled") {
-            const profileResult = await dispatch(fetchUserProfile());
-            if (profileResult.meta.requestStatus === "fulfilled") {
-                navigate("/profile");
-            }
-        } else {
-            setMessage("❌ " + (result.payload as string));
-        }
+        dispatch(login({ email, password }))
+            .unwrap()
+            .then(() => {
+                dispatch(fetchUserProfile())
+                    .unwrap()
+                    .then(() => {
+                        toast.success("Inloggning lyckades!");
+                        navigate("/profile");
+                    })
+                    .catch(() => {
+                        toast.error("Kunde inte hämta användarprofilen");
+                    });
+            })
+            .catch((error: any) => {
+                toast.error("Inloggning misslyckades: " + error);
+            });
     };
 
     if (user) {
@@ -73,7 +77,6 @@ const Login = () => {
                 },
             ]}
             onSubmit={handleSubmit}
-            message={message}
             submitLabel="Login"
             loading={loading}
         />

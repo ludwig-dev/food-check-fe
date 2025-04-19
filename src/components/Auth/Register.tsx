@@ -2,9 +2,10 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { register } from "../../redux/Slices/authSlice";
-
+import toast from "react-hot-toast";
 import UserIcons from "../Shared/Icons/UserIcons";
 import AuthForm from "./AuthForm";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -12,18 +13,20 @@ const Register = () => {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [message, setMessage] = useState("");
+    const navigate = useNavigate();
 
-    const handleRegister = async (e: React.FormEvent) => {
+    const handleRegister = (e: React.FormEvent) => {
         e.preventDefault();
-        setMessage("");
 
-        const result = await dispatch(register({ email, username, password }));
-        if (register.fulfilled.match(result)) {
-            setMessage("✅ Registration successful!");
-        } else {
-            setMessage("❌ " + (result.payload as string));
-        }
+        dispatch(register({ email, username, password }))
+            .unwrap()
+            .then(() => {
+                toast.success("Registrering lyckades!");
+                navigate("/login");
+            })
+            .catch((error: any) => {
+                toast.error("Registrering misslyckades: " + error);
+            });
     };
 
     if (user) {
@@ -74,7 +77,6 @@ const Register = () => {
                 },
             ]}
             onSubmit={handleRegister}
-            message={message}
             submitLabel="Register"
             footer={
                 <p className="text-sm text-gray-800 text-center">
