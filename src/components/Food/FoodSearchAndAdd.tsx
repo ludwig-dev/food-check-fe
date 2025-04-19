@@ -6,8 +6,8 @@ import { addIngredient } from "../../redux/Slices/recipeSlice";
 import { useParams } from "react-router-dom";
 
 const FoodSearchAndAdd = () => {
-    const { id } = useParams(); // recipeId from route
-    const recipeId = Number(id);
+    const { id } = useParams();
+    const recipeId = parseInt(id?.split("-")[0] || "", 10);    
 
     const dispatch = useDispatch<AppDispatch>();
     const { searchResults, loading } = useSelector((state: RootState) => state.food);
