@@ -4,6 +4,7 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { fetchRecipes, createRecipe, deleteRecipe } from "../../redux/Slices/recipeSlice";
 import { Link } from "react-router-dom";
 import RecipeIcons from "../Shared/Icons/RecipeIcons";
+import toast from "react-hot-toast";
 
 const RecipeList = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -17,14 +18,28 @@ const RecipeList = () => {
 
     const handleDeleteRecipe = (id: number) => {
         if (window.confirm("Är du säker på att du vill ta bort detta recept?")) {
-            dispatch(deleteRecipe(id));
+            dispatch(deleteRecipe(id))
+                .unwrap()
+                .then(() => {
+                    toast.success("Receptet har tagits bort!");
+                })
+                .catch(() => {
+                    toast.error("Misslyckades att ta bort receptet.");
+                });
         }
     };
 
     const handleCreateRecipe = () => {
         const name = prompt("Ange receptnamn:");
         if (name) {
-            dispatch(createRecipe({ name, ingredients: [] }));
+            dispatch(createRecipe({ name, ingredients: [] }))
+                .unwrap()
+                .then(() => {
+                    toast.success("Receptet " + name + " har skapats!");
+                })
+                .catch(() => {
+                    toast.error("Misslyckades att skapa receptet.");
+                });
         }
     };
 
