@@ -10,6 +10,7 @@ import NutritionPopup from "./NutritionPopup";
 import RecipeIcons from "../Shared/Icons/RecipeIcons";
 import UserIcons from "../Shared/Icons/UserIcons";
 import RecipeSettings from "./RecipeSettings";
+import toast from "react-hot-toast";
 
 const RecipeDetails = () => {
     const { id } = useParams<{ id: string }>();
@@ -40,14 +41,33 @@ const RecipeDetails = () => {
 
     const handleUpdateIngredientAmount = (foodId: number) => {
         const newAmount = updatedAmounts[foodId];
+
         if (detailedRecipe && newAmount !== undefined) {
-            dispatch(updateIngredientAmount({ recipeId: numericId, foodId, newAmountInGrams: newAmount }));
+            dispatch(updateIngredientAmount({
+                recipeId: numericId,
+                foodId,
+                newAmountInGrams: newAmount,
+            }))
+                .unwrap()
+                .then(() => {
+                    toast.success("Mängden uppdaterad för " + detailedRecipe.ingredients.find(ing => ing.foodId === foodId)?.foodName + "!");
+                })
+                .catch(() => {
+                    toast.error("Misslyckades att uppdatera mängden för " + detailedRecipe.ingredients.find(ing => ing.foodId === foodId)?.foodName);
+                });
         }
     };
 
     const handleRemoveIngredient = (foodId: number) => {
         if (detailedRecipe) {
-            dispatch(removeIngredient({ recipeId: numericId, foodId }));
+            dispatch(removeIngredient({ recipeId: numericId, foodId }))
+                .unwrap()
+                .then(() => {
+                    toast.success("Ingrediensen borttagen!");
+                })
+                .catch(() => {
+                    toast.error("Misslyckades att ta bort ingrediensen.");
+                });
         }
     };
 
