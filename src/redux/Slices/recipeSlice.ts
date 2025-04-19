@@ -130,6 +130,30 @@ export const updateIngredientAmount = createAsyncThunk(
     }
 );
 
+export const updateRecipeName = createAsyncThunk<
+    { id: number; name: string },
+    { recipeId: number; name: string },
+    { rejectValue: string }
+>(
+    "recipe/updateRecipeName",
+    async ({ recipeId, name }, { rejectWithValue }) => {
+        try {
+            const response = await axios.put<{ name: string }>(
+                `${API_URL_RECIPES}/${recipeId}/rename`,
+                { name },
+                { withCredentials: true }
+            );
+
+            return { id: recipeId, name: response.data.name }; // 👈 clean return
+        } catch (error: any) {
+            return rejectWithValue(
+                error.response?.data || "Failed to update to a new name"
+            );
+        }
+    }
+);
+
+
 const recipeSlice = createSlice({
     name: "recipe",
     initialState,
@@ -252,7 +276,28 @@ const recipeSlice = createSlice({
             .addCase(updateIngredientAmount.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
+            })
+            .addCase(updateRecipeName.pending, (state) => {
+                state.loading = true;
+            })
+            // Update recipe name
+            .addCase(updateRecipeName.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(updateRecipeName.fulfilled, (state, action) => {
+                state.loading = false;
+                state.error = null;
+
+                const recipe = state.recipes.find((r) => r.id === action.payload.id);
+                if (recipe) {
+                    recipe.name = action.payload.name;
+                }
+            })
+            .addCase(updateRecipeName.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
             });
+        ;
     },
 });
 
