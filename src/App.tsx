@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserProfile } from "./redux/Slices/userSlice";
 import { AppDispatch, RootState } from "./redux/store";
+import { Toaster } from "react-hot-toast";
 import AppRoutes from "./routes/AppRoutes";
 import Navbar from "./components/Shared/NavBar";
 
@@ -24,6 +25,7 @@ const App = () => {
         <>
             <Navbar />
             <AppRoutes />
+            <Toaster position="top-center" toastOptions={{ duration: 3000 }} />
         </>
     );
 };
