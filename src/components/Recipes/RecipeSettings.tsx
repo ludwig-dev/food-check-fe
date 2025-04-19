@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
 import { updateRecipeName, publishRecipe } from "../../redux/Slices/recipeSlice";
+import toast from "react-hot-toast";
 
 interface RecipeSettingsProps {
     recipeId: number;
@@ -25,6 +26,7 @@ const RecipeSettings = ({ recipeId, onClose }: RecipeSettingsProps) => {
             .then(() => {
                 setShowRenameInput(false);
                 onClose();
+                toast.success("Receptnamnet har ändrats!");
             });
     };
 
@@ -32,10 +34,10 @@ const RecipeSettings = ({ recipeId, onClose }: RecipeSettingsProps) => {
         dispatch(publishRecipe(recipeId))
             .unwrap()
             .then(() => {
-                // Optionally show a toast or success message here
+                toast.success("Receptet har publicerats!");
             })
             .catch((error) => {
-                console.error("Failed to publish recipe:", error);
+                toast.error("Misslyckades att publicera receptet: " + error.message);
             })
             .finally(() => {
                 onClose();
