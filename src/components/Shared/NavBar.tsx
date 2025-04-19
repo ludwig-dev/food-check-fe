@@ -2,13 +2,21 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { logout } from "../../redux/Slices/authSlice";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
     const dispatch = useDispatch<AppDispatch>();
     const { user } = useSelector((state: RootState) => state.user);
 
     const handleLogout = () => {
-        dispatch(logout());
+        dispatch(logout())
+        .unwrap()
+        .then(() => {
+            toast.success("Utloggning lyckades!");
+        })
+        .catch((error: any) => {
+            toast.error("Misslyckades: " + error);
+        });
     };
 
     return (
