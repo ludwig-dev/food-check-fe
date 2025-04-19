@@ -9,6 +9,7 @@ import Home from "../components/Shared/Home";
 import RecipeList from "../components/Recipes/RecipeList";
 import RecipeDetails from "../components/Recipes/RecipeDetails";
 import PublishedRecipesPage from "../components/publishedRecipes/PublishedRecipesPage";
+import PublicRecipeDetails from "../components/publishedRecipes/PublicRecipeDetails";
 
 const AppRoutes = () => (
     <Routes>
@@ -48,6 +49,14 @@ const AppRoutes = () => (
             element={
                 <PrivateRoute>
                     <PublishedRecipesPage />
+                </PrivateRoute>
+            }
+        />
+        <Route
+            path="/public-recipes/:id"
+            element={
+                <PrivateRoute>
+                    <PublicRecipeDetails />
                 </PrivateRoute>
             }
         />

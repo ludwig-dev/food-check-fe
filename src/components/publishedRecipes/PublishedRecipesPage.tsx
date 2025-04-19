@@ -30,7 +30,7 @@ const PublishedRecipesPage = () => {
                         className="bg-white rounded-lg shadow p-4 border border-gray-100 flex justify-between items-center"
                     >
                         <Link
-                            to={`/recipes/${recipe.id}-${slugify(recipe.name)}`}
+                            to={`/public-recipes/${recipe.id}-${slugify(recipe.name)}`}
                             className="text-lg font-medium text-blue-600 hover:underline"
                         >
                             {recipe.name}
