@@ -8,6 +8,7 @@ import AdminRoute from "../components/Admin/adminRoute";
 import Home from "../components/Shared/Home";
 import RecipeList from "../components/Recipes/RecipeList";
 import RecipeDetails from "../components/Recipes/RecipeDetails";
+import PublishedRecipesPage from "../components/publishedRecipes/PublishedRecipesPage";
 
 const AppRoutes = () => (
     <Routes>
@@ -39,6 +40,14 @@ const AppRoutes = () => (
             element={
                 <PrivateRoute>
                     <RecipeDetails />
+                </PrivateRoute>
+            }
+        />
+        <Route
+            path="/recipes/explore"
+            element={
+                <PrivateRoute>
+                    <PublishedRecipesPage />
                 </PrivateRoute>
             }
         />
