@@ -6,6 +6,7 @@ import { fetchPublishedRecipeById } from "../../redux/Slices/publishedRecipesSli
 import { useEffect } from "react";
 // import NutritionPopup from "../Recipes/NutritionPopup";
 import RecipeIcons from "../Shared/Icons/RecipeIcons";
+import toast from "react-hot-toast";
 
 const PublicRecipeDetails = () => {
     const { id } = useParams<{ id: string }>();
@@ -16,19 +17,25 @@ const PublicRecipeDetails = () => {
 
     const recipe = useSelector((state: RootState) => state.publishedRecipes.currentRecipe);
 
-
     // const nutrition = useSelector((state: RootState) => state.nutrition.nutrition);
     // const isNutritionModalOpen = useSelector((state: RootState) => state.nutrition.modalOpen);
 
     useEffect(() => {
         if (numericId) {
-            dispatch(fetchPublishedRecipeById(numericId));
+            dispatch(fetchPublishedRecipeById(numericId))
         }
     }, [dispatch, numericId]);
 
     const handleShowNutrition = () => {
         if (numericId) {
-            dispatch(fetchNutritionForRecipe(numericId));
+            dispatch(fetchNutritionForRecipe(numericId))
+                .unwrap()
+                .then(() => {
+                    toast.success("Näringsinformation hämtad!");
+                })
+                .catch(() => {
+                    toast.error("Misslyckades att ta hämta näringsinformation");
+                });
         }
     };
 
