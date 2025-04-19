@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
-import { updateRecipeName } from "../../redux/Slices/recipeSlice";
+import { updateRecipeName, publishRecipe } from "../../redux/Slices/recipeSlice";
 
 interface RecipeSettingsProps {
     recipeId: number;
@@ -29,10 +29,19 @@ const RecipeSettings = ({ recipeId, onClose }: RecipeSettingsProps) => {
     };
 
     const handlePublishClick = () => {
-        // TODO: implement publish API call later
-        console.log("Publish recipe", recipeId);
-        onClose();
+        dispatch(publishRecipe(recipeId))
+            .unwrap()
+            .then(() => {
+                // Optionally show a toast or success message here
+            })
+            .catch((error) => {
+                console.error("Failed to publish recipe:", error);
+            })
+            .finally(() => {
+                onClose();
+            });
     };
+
 
     return (
         <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-md shadow-md p-2 z-10">

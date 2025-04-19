@@ -153,6 +153,27 @@ export const updateRecipeName = createAsyncThunk<
     }
 );
 
+export const publishRecipe = createAsyncThunk<
+    number,
+    number,
+    { rejectValue: string }
+>(
+    "recipe/publishRecipe",
+    async (recipeId, { rejectWithValue }) => {
+        try {
+            await axios.put(
+                `http://localhost:8080/api/recipes/${recipeId}/publish`,
+                {},
+                { withCredentials: true }
+            );
+            return recipeId;
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data || "Failed to publish recipe");
+        }
+    }
+);
+
+
 
 const recipeSlice = createSlice({
     name: "recipe",
@@ -293,7 +314,24 @@ const recipeSlice = createSlice({
             .addCase(updateRecipeName.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
-            });
+            })
+            // Publish recipe
+            .addCase(publishRecipe.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(publishRecipe.fulfilled, (state, action) => {
+                state.loading = false;
+                state.error = null;
+                const recipe = state.recipes.find((r) => r.id === action.payload);
+                if (recipe) {
+                    console.log(`Recipe ${recipe.id} published`);
+                }
+            })
+            .addCase(publishRecipe.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            })
+            ;
         ;
     },
 });
