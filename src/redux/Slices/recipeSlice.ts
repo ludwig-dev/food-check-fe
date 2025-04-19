@@ -144,7 +144,7 @@ export const updateRecipeName = createAsyncThunk<
                 { withCredentials: true }
             );
 
-            return { id: recipeId, name: response.data.name }; // 👈 clean return
+            return { id: recipeId, name: response.data.name };
         } catch (error: any) {
             return rejectWithValue(
                 error.response?.data || "Failed to update to a new name"
@@ -276,9 +276,6 @@ const recipeSlice = createSlice({
             .addCase(updateIngredientAmount.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
-            })
-            .addCase(updateRecipeName.pending, (state) => {
-                state.loading = true;
             })
             // Update recipe name
             .addCase(updateRecipeName.pending, (state) => {

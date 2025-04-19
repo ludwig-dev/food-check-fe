@@ -9,6 +9,7 @@ import { RecipeDetailsData } from "../../redux/Slices/recipeSlice";
 import NutritionPopup from "./NutritionPopup";
 import RecipeIcons from "../Shared/Icons/RecipeIcons";
 import UserIcons from "../Shared/Icons/UserIcons";
+import RecipeSettings from "./RecipeSettings";
 
 const RecipeDetails = () => {
     const { id } = useParams<{ id: string }>();
@@ -29,6 +30,7 @@ const RecipeDetails = () => {
     const [updatedAmounts, setUpdatedAmounts] = useState<{ [key: number]: number }>({});
     const [isNutritionModalOpen, setIsNutritionModalOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
+    const [showSettings, setShowSettings] = useState(false);
 
     useEffect(() => {
         if (!numericId || (!recipe || !isDetailed)) {
@@ -78,7 +80,23 @@ const RecipeDetails = () => {
                 </h2>
 
                 {/* Invisible spacer to balance the layout */}
-                <div className="w-[90px]"></div>
+                {/* <div className="w-[90px]"></div> */}
+                <div className="relative">
+                    <button
+                        onClick={() => setShowSettings((prev) => !prev)}
+                        className="text-sm text-gray-600 border rounded-md px-3 py-1 hover:bg-gray-200 transition"
+                    >
+                        <RecipeIcons.Settings size={22} className="opacity-100" />
+                    </button>
+
+                    {showSettings && (
+                        <RecipeSettings
+                            recipeId={numericId}
+                            onClose={() => setShowSettings(false)}
+                        />
+                    )}
+                </div>
+
             </div>
             <div className="flex items-center justify-between mb-4">
                 <h3 className="text-xl font-semibold text-gray-800">Ingredienser</h3>
