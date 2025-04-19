@@ -8,6 +8,7 @@ import userReducer from "./Slices/userSlice";
 import recipeReducer from "./Slices/recipeSlice";
 import foodReducer from "./Slices/foodSlice";
 import nutritionReducer from "./Slices/nutritionSlice";
+import publishedRecipesReducer from "./Slices/publishedRecipesSlice";
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
     recipe: recipeReducer,
     food: foodReducer,
     nutrition: nutritionReducer,
+    publishedRecipes: publishedRecipesReducer,
 });
 
 const persistConfig = {
