@@ -31,6 +31,12 @@ const Navbar = () => {
                                 </Link>
                             </li>
 
+                            <li>
+                                <Link to="/recipes/explore" className="hover:text-blue-600 transition">
+                                    Find Recipes
+                                </Link>
+                            </li>
+
                             {user.role === "ADMIN" && (
                                 <li>
                                     <Link to="/admin/dashboard" className="hover:text-blue-600 transition">
