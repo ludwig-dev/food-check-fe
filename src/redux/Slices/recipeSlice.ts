@@ -162,7 +162,7 @@ export const publishRecipe = createAsyncThunk<
     async (recipeId, { rejectWithValue }) => {
         try {
             await axios.put(
-                `http://localhost:8080/api/recipes/${recipeId}/publish`,
+                `http://localhost:8080/api/recipes/public/${recipeId}/publish`,
                 {},
                 { withCredentials: true }
             );
