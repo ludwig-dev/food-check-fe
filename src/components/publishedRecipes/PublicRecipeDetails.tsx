@@ -1,9 +1,10 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
-import { fetchNutritionForRecipe } from "../../redux/Slices/nutritionSlice";
+import NutritionPopup from "../Recipes/NutritionPopup";
 import { fetchPublishedRecipeById } from "../../redux/Slices/publishedRecipesSlice";
-import { useEffect } from "react";
+import { fetchPublishedRecipeNutrition } from "../../redux/Slices/nutritionSlice";
+import { useEffect, useState } from "react";
 // import NutritionPopup from "../Recipes/NutritionPopup";
 import RecipeIcons from "../Shared/Icons/RecipeIcons";
 import toast from "react-hot-toast";
@@ -17,8 +18,8 @@ const PublicRecipeDetails = () => {
 
     const recipe = useSelector((state: RootState) => state.publishedRecipes.currentRecipe);
 
-    // const nutrition = useSelector((state: RootState) => state.nutrition.nutrition);
-    // const isNutritionModalOpen = useSelector((state: RootState) => state.nutrition.modalOpen);
+    const nutrition = useSelector((state: RootState) => state.nutrition.nutrition);
+    const [isNutritionModalOpen, setIsNutritionModalOpen] = useState(false);
 
     useEffect(() => {
         if (numericId) {
@@ -28,10 +29,11 @@ const PublicRecipeDetails = () => {
 
     const handleShowNutrition = () => {
         if (numericId) {
-            dispatch(fetchNutritionForRecipe(numericId))
+            dispatch(fetchPublishedRecipeNutrition(numericId))
                 .unwrap()
                 .then(() => {
                     toast.success("Näringsinformation hämtad!");
+                    setIsNutritionModalOpen(true);
                 })
                 .catch(() => {
                     toast.error("Misslyckades att ta hämta näringsinformation");
@@ -82,12 +84,12 @@ const PublicRecipeDetails = () => {
                 ))}
             </ul>
 
-            {/* {isNutritionModalOpen && (
+            {isNutritionModalOpen && (
                 <NutritionPopup
                     nutrition={nutrition}
-                    onClose={() => dispatch({ type: "nutrition/closeModal" })}
+                    onClose={() => setIsNutritionModalOpen(false)}
                 />
-            )} */}
+            )}
         </div>
     );
 };
