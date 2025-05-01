@@ -3,7 +3,7 @@ import UserTable from "./UserTable";
 import SearchBar from "./SearchBar";
 import MessageBanner from "../Shared/MessageBanner";
 import { User } from "../../redux/Slices/userSlice";
-import { getAllUsers, searchByUsername } from "../../service/adminService";
+import { getAllUsers } from "../../service/adminService";
 
 const AdminPage = () => {
     const [users, setUsers] = useState<User[]>([]);
@@ -29,7 +29,7 @@ const AdminPage = () => {
                 fetchUsers();
                 return;
             }
-            const data = await searchByUsername(username);
+            const data = await getAllUsers(username);
             setUsers(data);
         } catch (err) {
             setMessage("❌ Failed to search users");
