@@ -9,7 +9,7 @@ export const fetchUserProfile = createAsyncThunk(
     "user/fetchUserProfile",
     async (_, { rejectWithValue }) => {
         try {
-            const response = await axios.get(`${API_URL_USERS}/get/userinfo`, { withCredentials: true });
+            const response = await axios.get(`${API_URL_USERS}/me`, { withCredentials: true });
             return response.data;
         } catch (error: any) {
             return rejectWithValue(error.response?.data || "Failed to fetch profile");
@@ -17,26 +17,34 @@ export const fetchUserProfile = createAsyncThunk(
     }
 );
 
-export const updateUsername = createAsyncThunk(
+export const updateUsername = createAsyncThunk<User, string>(
     "user/updateUsername",
-    async (newUsername: string, { rejectWithValue }) => {
+    async (newUsername, { rejectWithValue }) => {
         try {
-            await axios.put(`${API_URL_USERS}/update/username`, { newUsername }, { withCredentials: true });
-            return { newUsername };
-        } catch (error: any) {
-            return rejectWithValue(error.response?.data || "Failed to update username");
+            const { data } = await axios.patch<User>(
+                `${API_URL_USERS}/me`,
+                { username: newUsername },
+                { withCredentials: true }
+            );
+            return data;
+        } catch (err: any) {
+            return rejectWithValue(err.response?.data || "Failed to update username");
         }
     }
 );
 
-export const updateEmail = createAsyncThunk(
+export const updateEmail = createAsyncThunk<User, string>(
     "user/updateEmail",
-    async (newEmail: string, { rejectWithValue }) => {
+    async (newEmail, { rejectWithValue }) => {
         try {
-            await axios.put(`${API_URL_USERS}/update/email`, { newEmail }, { withCredentials: true });
-            return { newEmail };
-        } catch (error: any) {
-            return rejectWithValue(error.response?.data || "Failed to update email");
+            const { data } = await axios.patch<User>(
+                `${API_URL_USERS}/me`,
+                { email: newEmail },
+                { withCredentials: true }
+            );
+            return data;
+        } catch (err: any) {
+            return rejectWithValue(err.response?.data || "Failed to update email");
         }
     }
 );
@@ -104,7 +112,7 @@ const userSlice = createSlice({
                 state.loading = true;
             })
             .addCase(updateUsername.fulfilled, (state, action) => {
-                if (state.user) state.user.username = action.payload.newUsername;
+                if (state.user) state.user.username = action.payload.username;
                 state.loading = false;
             })
             .addCase(updateUsername.rejected, (state, action) => {
@@ -116,7 +124,7 @@ const userSlice = createSlice({
                 state.loading = true;
             })
             .addCase(updateEmail.fulfilled, (state, action) => {
-                if (state.user) state.user.email = action.payload.newEmail;
+                if (state.user) state.user.email = action.payload.email;
                 state.loading = false;
             })
             .addCase(updateEmail.rejected, (state, action) => {
