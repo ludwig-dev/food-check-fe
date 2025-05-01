@@ -53,7 +53,7 @@ export const deleteAccount = createAsyncThunk(
     "user/deleteAccount",
     async (_, { dispatch, rejectWithValue }) => {
         try {
-            await axios.delete(`${API_URL_USERS}/delete`, { withCredentials: true });
+            await axios.delete(`${API_URL_USERS}/me`, { withCredentials: true });
             dispatch(clearUser());
         } catch (error: any) {
             return rejectWithValue(error.response?.data || "Failed to delete account");
